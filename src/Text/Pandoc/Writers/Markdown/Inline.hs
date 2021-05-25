@@ -499,8 +499,8 @@ inlineToMarkdown opts (Cite (c:cs) lst)
            suffs <- inlineListToMarkdown opts $ citationSuffix c
            rest <- mapM convertOne cs
            let inbr = suffs <+> joincits rest
-               br   = if isEmpty inbr then empty else char '[' <> inbr <> char ']'
-           return $ literal ("@" <> maybeInBraces (citationId c)) <+> br
+               br   = if isEmpty inbr then empty else char ',' <+> inbr
+           return $ literal ("@" <> maybeInBraces (citationId c)) <> br
          else do
            cits <- mapM convertOne (c:cs)
            return $ literal "[" <> joincits cits <> literal "]"
@@ -510,7 +510,7 @@ inlineToMarkdown opts (Cite (c:cs) lst)
                  defaultParserState ("@" <> key) of
             Left _  -> "{" <> key <> "}"
             Right _ -> key
-        joincits = hcat . intersperse (literal "; ") . filter (not . isEmpty)
+        joincits = hcat . intersperse (literal ", ") . filter (not . isEmpty)
         convertOne Citation { citationId      = k
                             , citationPrefix  = pinlines
                             , citationSuffix  = sinlines
