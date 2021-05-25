@@ -499,7 +499,7 @@ inlineToMarkdown opts (Cite (c:cs) lst)
            suffs <- inlineListToMarkdown opts $ citationSuffix c
            rest <- mapM convertOne cs
            let inbr = suffs <+> joincits rest
-               br   = if isEmpty inbr then empty else char ',' <+> inbr
+               br   = if isEmpty inbr then space else char ',' <+> inbr
            return $ literal ("@" <> maybeInBraces (citationId c)) <> br
          else do
            cits <- mapM convertOne (c:cs)
